@@ -1,3 +1,4 @@
+
 import Navigation from "../components/Navigation";
 import { useParams } from 'react-router-dom';
 
@@ -8,6 +9,9 @@ const SeeContact = () => {
         { text: '', link: '' },
         { text: 'Modify', link: `/modifycontact/${id}` },
     ];
+
+
+
 
 
     return (

@@ -11,6 +11,10 @@
     "@types/react": "^18.2.51",
     "@types/react-dom": "^18.2.18",
     "@types/styled-components": "^5.1.34",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.9.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.21.3",
@@ -20,6 +24,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "server": "nodemon ./api/app.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -44,6 +49,7 @@
     ]
   },
   "devDependencies": {
+    "nodemon": "^3.0.3",
     "styled-reset": "^4.5.2"
   }
 }

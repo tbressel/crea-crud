@@ -3,7 +3,9 @@
 ////////////////////////////////////////////////////////
 
 // Style importations
-
+import styled from 'styled-components';
+import { colors } from '../colors'; 
+import { useEffect, useState } from 'react';
 
 
 // Components importation
@@ -27,6 +29,24 @@ const Home = () => {
     { text: 'Add Contact', link: '/addcontact' },
     // Ajoutez ou supprimez des liens ici
   ];
+
+const [contact, setContact] = useState([]);
+
+
+useEffect(() => {
+  const getContactList = async () => {
+      try {
+          const response = await fetch(`http://localhost:4000/contactlist`);
+          const data = await response.json();
+          setContact(data);
+          console.log(data);
+      } catch (error) {
+          console.error('Error fetching data:', error);
+      }
+  };
+
+  getContactList();
+}, []);
 
   return (
     <>
