@@ -2,6 +2,7 @@ import Navigation from "../components/Navigation";
 import { useParams } from 'react-router-dom';
 import React, { useState, useContext, useEffect } from 'react';
 import { ContactListContext } from '../contexts/useContacts';
+import DeleteContact from "./DeleteContact";
 
 const ModifyContact = () => {
     const { id } = useParams<{ id: string }>();
@@ -10,7 +11,7 @@ const ModifyContact = () => {
     const links = [
         { text: 'Cancel', link: '/home' },
         { text: '', link: '' },
-        { text: 'Delete', link: '' },
+        { text: '', link: ''},
     ];
 
     const [contact, setContact] = useState({
@@ -67,6 +68,9 @@ const ModifyContact = () => {
     return (
         <>
             <Navigation links={links} />
+
+            <DeleteContact />
+
             <p>Modify Contact {id}</p>
             <form onSubmit={handleSubmit}>
                 <label>
