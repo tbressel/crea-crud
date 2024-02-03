@@ -28,8 +28,7 @@ const StyledDiv = styled.div`
     box-shadow: ${props => props.theme.colors.blanc5} 2px 2px 2px 2px;
     margin-top: 20px;
     padding: 20px;
-`;
-
+`
 const ImgContainer = styled.div`
     display: flex;
     justify-content: center;
@@ -49,8 +48,7 @@ const Name = styled.h2`
         font-family: 'Barlow Regular';
         font-weight: normal;
     }
-`;
-
+`
 const PhoneContainer = styled.div`
 display: flex;
   flex-direction: column;
@@ -111,22 +109,12 @@ display: flex;
   
   }
 `
-
 const Mail = styled.div`
-
-
 `
-
 const Home = styled.div`
-
 `
-
-
 const Mobile = styled.div`
-
 `
-
-
 
 ////////////////////////////////////////////////////////////
 //////////////////   MAIN COMPONENT   //////////////////////
@@ -137,8 +125,8 @@ const SeeContact = () => {
     // Get the contact list from general context
     const contacts = useContext(ContactListContext);
 
-      // Get the colors from general context
-  const colors = useContext(ThemeContext);
+    // Get the colors from general context
+    const colors = useContext(ThemeContext);
 
     // Get the ID from the URL with the hook useParams
     let { id } = useParams<{ id: string }>();
@@ -149,9 +137,9 @@ const SeeContact = () => {
     // Find the contact with the same URL id and fetched datas id.
     const selectedContact = contacts.find(contact => contact.id === contactId);
 
-/**
- * Links to display in the navigation bar
- */
+    /**
+     * Links to display in the navigation bar
+     */
     const links = [
         { text: 'Contact List', link: '/home' },
         { text: '', link: '' },
@@ -165,35 +153,36 @@ const SeeContact = () => {
                 <StyledDiv theme={colors}>
 
                     <ImgContainer theme={colors}>
-                        <img src="./assets/images/default.jpg" alt="" />
+                        <img src={selectedContact.avatar_file ? `../../assets/images/${selectedContact.avatar_file}` : "../../assets/images/noimage.svg"} alt="" />
+
                     </ImgContainer>
-                    <Name theme={colors}> {` ${selectedContact.lastname}  `} 
-              <span>{`${selectedContact.firstname}`}</span></Name>
-                    
+                    <Name theme={colors}> {` ${selectedContact.lastname}  `}
+                        <span>{`${selectedContact.firstname}`}</span></Name>
+
                     <PhoneContainer theme={colors}>
-                    <Mobile>
-                        <p>mobile</p>
-                        <p>
-                        {selectedContact.mobile_phone}
-                        </p> 
+                        <Mobile>
+                            <p>mobile</p>
+                            <p>
+                                {selectedContact.mobile_phone}
+                            </p>
                         </Mobile>
-                    <Home>
-                        <p>home</p> 
-                        <p>
-                            {selectedContact.home_phone}
+                        <Home>
+                            <p>home</p>
+                            <p>
+                                {selectedContact.home_phone}
                             </p>
                         </Home>
                     </PhoneContainer>
-                    
-                    
+
+
                     <MailContainer theme={colors}>
                         <Mail>
                             <p>Email</p>
-                             <p>
+                            <p>
                                 {selectedContact.email}
-                                </p>
-                            </Mail>
-                        </MailContainer>
+                            </p>
+                        </Mail>
+                    </MailContainer>
                 </StyledDiv>
             )}
         </>

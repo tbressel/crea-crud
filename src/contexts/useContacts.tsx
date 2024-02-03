@@ -16,6 +16,7 @@ interface ContactDataType {
   email: string;
   mobile_phone: string;
   home_phone: string;
+  avatar_file: string;
 }
 
 ////////////////////////////////////////////////////////////

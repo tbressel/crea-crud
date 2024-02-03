@@ -71,17 +71,17 @@ const ThemeContextProvider: React.FC<{ children: React.ReactNode }> = ({children
 
     // Colors for the dark theme
     const darkColors = {
-        bleu1: '#FFBB00',
-        bleu2: '#A09F00',
-        gris1: '#AAAAAA',
-        gris2: '#CCCCCC',
-        blanc1: '#000000',
-        blanc2: '#101010',
-        blanc3: '#202020',
-        blanc4: '#303030',
-        blanc5: '#404040',
-        rouge: '#FF3B30',
-        black: '#FFFFFF'
+        bleu1: '#004494',
+        bleu2: '#004494',
+        gris1: '#BDBDBD',
+        gris2: '#8E8E93',
+        blanc1: '#7a7a7a',
+        blanc2: '#a5a5a5',
+        blanc3: '#adadad',
+        blanc4: '#E0E0E0',
+        blanc5: '#000000',
+        rouge: '#ffffff',
+        black: '#000000'
     };
 
     // State to store the current theme

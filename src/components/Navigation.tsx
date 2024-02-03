@@ -23,6 +23,20 @@ const MainContainer = styled.div`
     background-color: ${props => props.theme.colors.blanc2};
     box-shadow: ${props => props.theme.colors.blanc5} 2px 2px 2px 2px;
 
+.btn {
+
+  margin: 5px;
+  border-radius: 20px;
+  
+  @media screen and (min-width: 768px) {
+    &:hover {
+    background-color: ${props => props.theme.colors.gris1};
+    border-radius: 20px;
+    margin: 5px;
+    transition: 300ms ease-in-out;
+  }}
+}
+
 p {
     color: ${props => props.theme.colors.bleu1};
     font-size: 1rem;
@@ -66,7 +80,7 @@ function Navigation({ links }: NavigationProps) {
   return (
     <MainContainer theme={colors}>
       {links.map((link, index) => (
-        <NavLink key={index} to={link.link}>
+        <NavLink key={index} to={link.link} className={link.link ? 'btn' : ''}>
           <p>{link.text}</p>
         </NavLink>
       ))}

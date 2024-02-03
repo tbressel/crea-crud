@@ -20,6 +20,19 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
+//multer (to record files)
+const multer = require('multer');
+const path = require('path');
+
+const storage = multer.diskStorage({
+  destination: 'public/assets/images/',
+  filename: function(req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ storage: storage });
+
 
 /////////////////////////////////////
 //////////    LIBRARY   /////////////
@@ -49,6 +62,7 @@ const pool = mysql.createPool({
     port: process.env.DB_PORT
 });
 
+// test the connexion to the database
 pool.getConnection((err, connection) => {
     if (err) {
         console.error(err);
@@ -71,7 +85,7 @@ app.listen(port, () => {
 app.get('/contactlist', (req, res) => {
 
      // prepare the request 
-    const sql = `SELECT * FROM person ORDER BY lastname ASC`;
+     const sql = `SELECT *, avatar_file FROM person ORDER BY lastname ASC`;
 
     // send the request to the database
     pool.query(sql, (error, results) => {
@@ -91,11 +105,13 @@ app.get('/contactlist', (req, res) => {
 ////////////////////////////////////////////////////////////////////////////
 ///////////////////////  ADD A CONTACT INTO DATABASE ///////////////////////
 ////////////////////////////////////////////////////////////////////////////
-app.post('/addcontact', (req, res) => {
+app.post('/addcontact', upload.single('avatar_file'), (req, res) => {
 
     // get the data from the request body
-    let {lastname, firstname, email, mobile_phone, home_phone} = req.body;
-    
+    let {lastname, firstname, email, mobile_phone, home_phone} = JSON.parse(req.body.contact);
+    // le nom du fichier sera généré automatiquement par multer
+    let avatar_file = req.file ? req.file.filename : null; 
+
     // check each data and escape characters against XSS
     lastname = validator.escape(lastname);
     firstname = validator.escape(firstname);
@@ -112,11 +128,11 @@ app.post('/addcontact', (req, res) => {
     }
 
     // prepare the request 
-    const sql = `INSERT INTO person (lastname, firstname, email, mobile_phone, home_phone) 
-    VALUES (?, ?, ?, ?, ?)`;
+    const sql = `INSERT INTO person (lastname, firstname, email, mobile_phone, home_phone, avatar_file) 
+    VALUES (?, ?, ?, ?, ?, ?)`;
 
     // send the request to the database
-    pool.query(sql, [lastname, firstname, email, mobile_phone, home_phone], (error) => {
+    pool.query(sql, [lastname, firstname, email, mobile_phone, home_phone, avatar_file], (error) => {
         if (error) {
             console.error(error);
             res.status(500).json({
@@ -137,10 +153,15 @@ app.post('/addcontact', (req, res) => {
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////  UPDATE A CONTACT INTO DATABASE ///////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-app.post('/modifycontact', (req, res) => {
+app.post('/modifycontact', upload.single('avatar_file'), (req, res) => {
 
     // get the data from the request body
-    let { id, lastname, firstname, email, mobile_phone, home_phone } = req.body;
+    let { id, lastname, firstname, email, mobile_phone, home_phone } = JSON.parse(req.body.contact);
+
+
+        // le nom du fichier sera généré automatiquement par multer
+        let avatar_file = req.file ? req.file.filename : null; 
+
 
     // check each data and escape characters against XSS
     lastname = validator.escape(lastname);
@@ -160,12 +181,12 @@ app.post('/modifycontact', (req, res) => {
     // prepare the request
     const sql = `
     UPDATE person
-    SET lastname = ?, firstname = ?, email = ?, mobile_phone = ?, home_phone = ?
+    SET lastname = ?, firstname = ?, email = ?, mobile_phone = ?, home_phone = ?, avatar_file = ?
     WHERE id = ?
 `;
 
     // send the request to the database
-    pool.query(sql, [lastname, firstname, email, mobile_phone, home_phone, id], (error) => {
+    pool.query(sql, [lastname, firstname, email, mobile_phone, home_phone,avatar_file, id], (error) => {
         if (error) {
             console.error(error);
             res.status(500).json({
