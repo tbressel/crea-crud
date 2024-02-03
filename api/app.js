@@ -85,3 +85,41 @@ app.post('/addcontact', (req, res) => {
         }
     });
 });
+
+app.post('/modifycontact', (req, res) => {
+    let { id, lastname, firstname, email, mobile_phone, home_phone } = req.body;
+    console.log('requete :', req.body)
+    lastname = validator.escape(lastname);
+    firstname = validator.escape(firstname);
+    email = validator.escape(email);
+    mobile_phone = validator.escape(mobile_phone);
+    home_phone = validator.escape(home_phone);
+
+    if (!validator.isEmail(email)) {
+        return res.status(400).json({
+            message: 'Invalid email',
+            status: 'Failure'
+        });
+    }
+
+    console.log(lastname, firstname, email, mobile_phone, home_phone);
+    const sql = `
+    UPDATE person
+    SET lastname = ?, firstname = ?, email = ?, mobile_phone = ?, home_phone = ?
+    WHERE id = ?
+`;
+    pool.query(sql, [lastname, firstname, email, mobile_phone, home_phone, id], (error) => {
+        if (error) {
+            console.error(error);
+            res.status(500).json({
+                message: 'Error from sql request',
+                status: 'Failure'
+            });
+        } else {
+            res.json({
+                message: 'modif ok', 
+                status: 'Success',
+            });
+        }
+    });
+});
