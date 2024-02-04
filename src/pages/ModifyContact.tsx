@@ -76,6 +76,7 @@ const ModifyContact = () => {
     // State for the redirection. Waiting for the response and then redirect to the home page only when the  state is changed
     const [redirected, setRedirected] = useState(false);
 
+
     // Get the colors from general context
     const colors = useContext(ThemeContext);
 
@@ -99,23 +100,50 @@ const ModifyContact = () => {
         avatar_file: ''
     });
 
+
+          // State for the selected image
+          const [selectedImage, setSelectedImage] = useState("");
+
+
     useEffect(() => {
         const foundContact = contacts.find(c => c.id.toString() === id);
         if (foundContact) {
             setContact(foundContact);
+            setSelectedImage(`../../assets/images/${foundContact.avatar_file}`); // Set selectedImage when contact is found
         }
     }, [id, contacts]);
 
 
-  // Function to handle the change in the input fields
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setContact(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
-    };
 
+
+   // Function to handle the change in the input fields
+   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    if (name === 'avatar_file') {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setSelectedImage(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    } else {
+      setContact(prevState => ({
+        ...prevState,
+        [name]: value
+      }));
+
+      if (name === 'email') {
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailRegex.test(value)) {
+          console.error('Invalid format');
+          return;
+        }
+      }
+    }
+  };
 
   // Function to fetch the form submission
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -169,17 +197,17 @@ useEffect(() => {
                 <Form theme={colors} onSubmit={handleSubmit}>
 
 
-                    <ImgContainer theme={colors}>
-                        <label>
-                            <input type="file" id="file" name="avatar_file" accept="image/*" style={{ display: 'none' }} />
-                        </label>
-                        <label htmlFor="file" style={{ cursor: 'pointer' }}>
-                            <img src={contact.avatar_file ? `../../assets/images/${contact.avatar_file}` : `../../assets/images/default.svg`} alt="" />
-                        </label>
-                        <p>
-                            Change photo
-                        </p>
-                    </ImgContainer>
+                <ImgContainer theme={colors}>
+    <label>
+        <input type="file" id="file" name="avatar_file" accept="image/*" style={{ display: 'none' }} onChange={handleChange} />
+    </label>
+    <label htmlFor="file" style={{ cursor: 'pointer' }}>
+        <img src={selectedImage} alt="" />
+    </label>
+    <p>
+        Change photo
+    </p>
+</ImgContainer>
 
 
                     <label>
@@ -198,6 +226,7 @@ useEffect(() => {
                             name="firstname"
                             value={contact.firstname}
                             onChange={handleChange}
+                            required
                         />
                     </label>
                     <label>
@@ -207,6 +236,7 @@ useEffect(() => {
                             name="email"
                             value={contact.email}
                             onChange={handleChange}
+                            required
                         />
                     </label>
                     <label>
@@ -216,6 +246,9 @@ useEffect(() => {
                             name="mobile_phone"
                             value={contact.mobile_phone}
                             onChange={handleChange}
+                            minLength={10} maxLength={10}
+                            pattern="[0-9]+"
+                            required
                         />
                     </label>
                     <label>
@@ -225,6 +258,8 @@ useEffect(() => {
                             name="home_phone"
                             value={contact.home_phone}
                             onChange={handleChange}
+                            minLength={10} maxLength={10}
+                            pattern="[0-9]+"
                         />
                     </label>
                     <button type="submit">Valider</button>

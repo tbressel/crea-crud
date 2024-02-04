@@ -74,6 +74,10 @@ const ImgContainer = styled.div`
 ////////////////////////////////////////////////////////////
 const AddContact = () => {
 
+  // State for the selected image
+  const [selectedImage, setSelectedImage] = useState("../../assets/images/default.svg");
+
+
   // State for the redirection. Waiting for the response and then redirect to the home page only when the  state is changed
   const [redirected, setRedirected] = useState(false);
 
@@ -98,14 +102,35 @@ const AddContact = () => {
   });
 
 
-  // Function to handle the change in the input fields
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+   // Function to handle the change in the input fields
+   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setContact(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
+
+    if (name === 'avatar_file') {
+      const file = e.target.files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setSelectedImage(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+      }
+    } else {
+      setContact(prevState => ({
+        ...prevState,
+        [name]: value
+      }));
+
+      if (name === 'email') {
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailRegex.test(value)) {
+          console.error('Invalid format');
+          return;
+        }
+      }
+    }
   };
+
 
   
   // Function to fetch the form submission
@@ -146,6 +171,9 @@ const AddContact = () => {
     }
 }, [redirected]);
 
+
+
+
   return (
     <>
       <Navigation links={links} />
@@ -154,35 +182,39 @@ const AddContact = () => {
         <Form onSubmit={handleSubmit} theme={colors}>
 
           <ImgContainer theme={colors}>
-            <label>
-              <input type="file" id="file" name="avatar_file" accept="image/*" style={{ display: 'none' }} />
-            </label>
-              <label htmlFor="file" style={{ cursor: 'pointer' }}>
-                <img src="../../assets/images/default.svg" alt="" />
-              </label>
-            <p>
-              Add a photo
-            </p>
-          </ImgContainer>
+        <label style={{position: 'relative'}}>
+          <p>Add a photo</p>
+          <input type="file" id="file" name="avatar_file" accept="image/*" onChange={handleChange} style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            opacity: 0,
+            cursor: 'pointer'
+          }} />
+          <span><img src={selectedImage} alt="" /></span>
+        </label>
+      </ImgContainer>
           <label>
             Nom:
-            <input type="text" name="lastname" value={contact.lastname} onChange={handleChange} />
+            <input type="text" name="lastname" value={contact.lastname} onChange={handleChange} required/>
           </label>
           <label>
             Prénom:
-            <input type="text" name="firstname" value={contact.firstname} onChange={handleChange} />
+            <input type="text" name="firstname" value={contact.firstname} onChange={handleChange} required/>
           </label>
           <label>
             E-mail:
-            <input type="email" name="email" value={contact.email} onChange={handleChange} />
+            <input type="email" name="email" value={contact.email} onChange={handleChange} required/>
           </label>
           <label>
             Mobile:
-            <input type="tel" name="mobile_phone" value={contact.mobile_phone} onChange={handleChange} />
-          </label>
+            <input type="tel" name="mobile_phone" value={contact.mobile_phone} onChange={handleChange} pattern="[0-9]+" minLength={10} maxLength={10} required/>          
+            </label>
           <label>
             Home:
-            <input type="tel" name="home_phone" value={contact.home_phone} onChange={handleChange} />
+            <input type="tel" name="home_phone" value={contact.home_phone} onChange={handleChange} pattern="[0-9]+" minLength={10} maxLength={10} />
           </label>
           <button type="submit">Ajouter</button>
         </Form>
@@ -191,8 +223,7 @@ const AddContact = () => {
   );
 };
 
+
+
 export default AddContact;
-
-
-
 
