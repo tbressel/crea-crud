@@ -28,19 +28,25 @@ import { styled } from 'styled-components';
 ////////////////////////////////////////////////////////////
 
 const GlobalStyle = styled.div`
+
+*{
+    box-sizing: border-box;
+}
+
+
 body {
     margin: 0;
     padding: 0;
-    box-sizing: content-box;
     overflow-x: hidden;
     min-width: 320px;
     font-family: 'Barlow Medium';
-
   }
+
   a {
     text-decoration: none;
     color: inherit;
   }
+  
   @font-face {
         font-family: 'Gibson Bold';
         src: url('/assets/fonts/Gibson/GibsonBold.woff2') format('woff2');
@@ -71,51 +77,50 @@ body {
 `
 
 const EyeImg = styled.div` 
-width: fit-content;
-  font-size: 3.8rem;
   position: absolute;
   top: 2px;
+  width: fit-content;
+  font-size: 3.8rem;
 `
-  
+
 const EyeContainer = styled.div`
-display: flex;
-justify-content: center;
-cursor: pointer;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
 `
 
 ////////////////////////////////////////////////////////////
 //////////////////   MAIN COMPONENT   //////////////////////
 ////////////////////////////////////////////////////////////
 
-const App =  () => {
+const App = () => {
   return (
-    
+
     <GlobalStyle>
-    <ThemeContextProvider>
+      <ThemeContextProvider>
 
-      <Content />
+        <Content />
 
-    </ThemeContextProvider>
-      </GlobalStyle>
+      </ThemeContextProvider>
+    </GlobalStyle>
   );
 }
 
+
+////////////////////////////////////////////////////////////
+////////////////////   SUB COMPONENT   /////////////////////
+////////////////////////////////////////////////////////////
 const Content = () => {
 
-  /**
-   * Get the colors and the function to toggle the theme
-   */
+  // Get the colors and the function to toggle the theme
   const { colors, toggleTheme } = useContext(ThemeContext);
 
   return (
     <>
-    <ContactListContextProvider> 
-
-
+      <ContactListContextProvider>
         <EyeContainer>
           <EyeImg onClick={toggleTheme}>👁️</EyeImg>
         </EyeContainer>
-
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -128,8 +133,8 @@ const Content = () => {
             <Route path="*" element={<Error />} />
           </Routes>
         </BrowserRouter>
-    </ContactListContextProvider> 
-      </>
+      </ContactListContextProvider>
+    </>
   );
 }
 

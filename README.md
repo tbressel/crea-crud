@@ -1,6 +1,9 @@
 
 **Application built for a test, to be part of the next session of my learning at Creative.**
 
+**INTRODUCE**
+
+This application took me 2 or 3 days during my free time. I try to do it in the same way than the actual technology I'm learning theses days and since nearly 2 monthes : React JS.
 
 
 
@@ -11,7 +14,7 @@ This little application is a phone / contact database. It contains few features 
 
 - **CREATE** => Adding a contact by entering firstname, lastname, email, mobile number, home number and at last import an image (or not .. if not a default one will be displayed instead).
 
-- **READ** => See the whole contacts recorded.
+- **READ** => See the whole contacts recorded, and when the screen larger than 768px a desktop feature is available : you can see avatar of each contact when mouse hover each contact.
 
 - **READ** => By a mouse click on someone into the contact list, it's possible to see details including profile picture.
 
@@ -47,13 +50,19 @@ I use port 3000 for development listening for the front part and port 4000 for t
 
 **Application réalisée pour un test d'entrée, dans le cadre de la prochaine session de ma formation chez Creative.**
 
+**PRESENTATION**
+
+Cette application m'a pris 2 ou 3 jours pendant mon temps libre. J'ai essayé de la réaliser dans la prolongation de la technologie que j'apprends ces jours-ci et depuis près de 2 mois de stage : React JS.
+
+
+
 **À PROPOS**
 
 Cette petite application est une base de données de téléphones et de contacts. Elle contient quelques fonctionnalités telles que :
 
 - **CRÉER** => Ajout d'un contact en saisissant le prénom, le nom, l'e-mail, le numéro de portable, le numéro de téléphone fixe et enfin, importation d'une image (ou non... si ce n'est pas le cas, une image par défaut sera affichée à la place).
 
-- **LIRE** => Affichage de tous les contacts enregistrés.
+- **READ** => Affichage de tous les contacts enregistrés. Et lorsque l'écran est plus grand que 768px, une fonctionnalité de bureau est disponible : vous pouvez voir l'avatar de chaque contact lorsque vous survolez chaque contact.
 
 - **LIRE** => En cliquant sur une personne dans la liste des contacts, il est possible de voir les détails, y compris la photo de profil.
 

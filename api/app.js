@@ -107,6 +107,10 @@ app.get('/contactlist', (req, res) => {
 ////////////////////////////////////////////////////////////////////////////
 app.post('/addcontact', upload.single('avatar_file'), (req, res) => {
 
+    console.log('Received request to add contact:', req.body.contact);
+    console.log('Received file:', req.file);
+
+
     // get the data from the request body
     let {lastname, firstname, email, mobile_phone, home_phone} = JSON.parse(req.body.contact);
     // le nom du fichier sera généré automatiquement par multer

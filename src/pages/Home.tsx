@@ -12,13 +12,11 @@ import ContactList from '../components/ContactList'
 
 const Home = () => {
 
-/**
- * Links to display in the navigation bar
- */
+// Links to display in the navigation bar
   const links = [
     { text: '', link: '' },
     { text: '', link: '' },
-    { text: 'Add Contact', link: '/addcontact' },
+    { text: 'Ajouter un contact', link: '/addcontact' },
   ];
 
   return (

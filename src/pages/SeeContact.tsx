@@ -50,64 +50,62 @@ const Name = styled.h2`
     }
 `
 const PhoneContainer = styled.div`
-display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  border-radius: 15px;
-  background-color: #fff;
-  box-shadow: #E5E5E5 2px 2px 2px 2px;
-  margin-top: 20px;
-  padding: 20px;
-  width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 15px;
+    background-color: #fff;
+    box-shadow: #E5E5E5 2px 2px 2px 2px;
+    margin-top: 20px;
+    padding: 20px;
+    width: 90%;
 
-  p:nth-child(1) {
-    color: ${props => props.theme.colors.black};
-  font-size: 1rem;
-  font-family: 'Barlow Regular';
-  font-weight: 200;
-  margin: 0;
-  padding: 5px;
-  text-align: left;
-  }
-  p:nth-child(2) {
-    color: ${props => props.theme.colors.bleu1};
-    font-size: 1.3rem;
-  font-family: 'Barlow Regular';
-  font-weight: 200;
-  margin: 0;
-  padding: 5px;
-  text-align: left;
-  }
+        p {
+          font-family: 'Barlow Regular';
+          font-weight: 200;
+          margin: 0;
+          padding: 5px;
+          text-align: left;
+        }
+
+        p:nth-child(1) {
+          color: ${props => props.theme.colors.black};
+          font-size: 1rem;
+        }
+
+        p:nth-child(2) {
+          color: ${props => props.theme.colors.bleu1};
+          font-size: 1.3rem;
+        }
 `
 const MailContainer = styled.div`
-display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  border-radius: 15px;
-  background-color: #fff;
-  box-shadow: #E5E5E5 2px 2px 2px 2px;
-  margin-top: 20px;
-  padding: 20px;
-  width: 90%;
-  p:nth-child(1) {
-    color: ${props => props.theme.colors.black};
-  font-size: 1rem;
-  font-family: 'Barlow Regular';
-  font-weight: 200;
-  margin: 0;
-  padding: 5px;
-  text-align: left;
-  };
-  p:nth-child(2) {
-    color: ${props => props.theme.colors.bleu1};
-    font-size: 1.3rem;
-  font-family: 'Barlow Regular';
-  font-weight: 200;
-  margin: 0;
-  padding: 5px;
-  text-align: left;
-  
-  }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 15px;
+    background-color: #fff;
+    box-shadow: #E5E5E5 2px 2px 2px 2px;
+    margin-top: 20px;
+    padding: 20px;
+    width: 90%;
+
+    p {
+        font-family: 'Barlow Regular';
+        font-weight: 200;
+        margin: 0;
+        padding: 5px;
+        text-align: left;
+    }
+
+    p:nth-child(1) {
+        color: ${props => props.theme.colors.black};
+        font-size: 1rem;
+
+    }
+    p:nth-child(2) {
+        color: ${props => props.theme.colors.bleu1};
+        font-size: 1.3rem;
+    }
 `
 const Mail = styled.div`
 `
@@ -122,34 +120,33 @@ const Mobile = styled.div`
 
 const SeeContact = () => {
 
-    // Get the contact list from general context
+    
+    // Get the contact & colors list from general context
     const contacts = useContext(ContactListContext);
-
-    // Get the colors from general context
     const colors = useContext(ThemeContext);
 
+
     // Get the ID from the URL with the hook useParams
-    let { id } = useParams<{ id: string }>();
-
     // Convert the ID from string to number
-    const contactId = parseInt(id as string);
-
     // Find the contact with the same URL id and fetched datas id.
+    let { id } = useParams<{ id: string }>();
+    const contactId = parseInt(id as string);
     const selectedContact = contacts.find(contact => contact.id === contactId);
 
-    /**
-     * Links to display in the navigation bar
-     */
+
+    // Links to display in the navigation bar
     const links = [
-        { text: 'Contact List', link: '/home' },
+        { text: 'Lister les contacts', link: '/home' },
         { text: '', link: '' },
-        { text: 'Modify', link: `/modifycontact/${id}` },
+        { text: 'Modifier un contact', link: `/modifycontact/${id}` },
     ];
+
 
     return (
         <>
             <Navigation links={links} />
             {selectedContact && (
+                
                 <StyledDiv theme={colors}>
 
                     <ImgContainer theme={colors}>
@@ -161,13 +158,13 @@ const SeeContact = () => {
 
                     <PhoneContainer theme={colors}>
                         <Mobile>
-                            <p>mobile</p>
+                            <p>Numero téléphone portable : </p>
                             <p>
                                 {selectedContact.mobile_phone}
                             </p>
                         </Mobile>
                         <Home>
-                            <p>home</p>
+                            <p>Numero téléphone fixe : </p>
                             <p>
                                 {selectedContact.home_phone}
                             </p>
@@ -177,7 +174,7 @@ const SeeContact = () => {
 
                     <MailContainer theme={colors}>
                         <Mail>
-                            <p>Email</p>
+                            <p>Adresse mail : </p>
                             <p>
                                 {selectedContact.email}
                             </p>

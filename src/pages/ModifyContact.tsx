@@ -18,34 +18,32 @@ import DeleteContact from "./DeleteContact";
 import styled from 'styled-components';
 
 
-
 ////////////////////////////////////////////////////////
 //////////////////   STYLE COMPONENTS   ////////////////
 ////////////////////////////////////////////////////////
 const FormContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  border-radius: 15px;
-  background-color: ${props => props.theme.colors.blanc2};
-  box-shadow: ${props => props.theme.colors.blanc5} 2px 2px 2px 2px;
-  margin-top: 20px;
-  padding: 20px;
+    display: flex;
+    justify-content: center;
+    border-radius: 15px;
+    background-color: ${props => props.theme.colors.blanc2};
+    box-shadow: ${props => props.theme.colors.blanc5} 2px 2px 2px 2px;
+    margin-top: 20px;
+    padding: 20px;
 `
 const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  width: min-content;
-  font-family: 'Barlow Medium';
+    display: flex;
+    flex-direction: column;
+    width: min-content;
+    font-family: 'Barlow Medium';
 
-input {
-  margin-bottom: 20px;
-  padding: 10px;
-  border-radius: 5px;
-  border: none;
-  box-shadow: ${props => props.theme.colors.blanc5} 1px 1px 1px 1px;
-}
-
-`
+        input {
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            box-shadow: ${props => props.theme.colors.blanc5} 1px 1px 1px 1px;
+        }
+        `
 const ImgContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -53,15 +51,16 @@ const ImgContainer = styled.div`
     align-items: center;
     margin: 20px 0;
     border: dotted 2px blue;
-  border-radius: 50%;
-    img {
-        width: 150px;
-        height: 150px;
+    border-radius: 50%;
 
-    }
-    label {
-      text-align: center;
-    }
+        img {
+            width: 150px;
+            height: 150px;
+        }
+
+        label {
+            text-align: center;
+        }
 `
 
 ////////////////////////////////////////////////////////////
@@ -69,19 +68,45 @@ const ImgContainer = styled.div`
 ////////////////////////////////////////////////////////////
 const ModifyContact = () => {
 
+
+
+    // Get the contact list & colors from general context
+    const contacts = useContext(ContactListContext);
+    const colors = useContext(ThemeContext);
+
+
+
+
     // Get the id from the URL
+    // State for the selected image
+    // Set selectedImage when contact is found
     const { id } = useParams<{ id: string }>();
+
+    const [selectedImage, setSelectedImage] = useState("");
+
+    useEffect(() => {
+        const foundContact = contacts.find(c => c.id.toString() === id);
+        if (foundContact) {
+            setContact(foundContact);
+            setSelectedImage(`../../assets/images/${foundContact.avatar_file}`);
+        }
+    }, [id, contacts]);
+
+
 
 
     // State for the redirection. Waiting for the response and then redirect to the home page only when the  state is changed
+    // Redirect to the home page when the state is changed
     const [redirected, setRedirected] = useState(false);
 
+    useEffect(() => {
+        if (redirected) {
+            window.location.assign('/home');
+        }
+    }, [redirected]);
 
-    // Get the colors from general context
-    const colors = useContext(ThemeContext);
 
-    // Get the contact list from general context
-    const contacts = useContext(ContactListContext);
+
 
     // Links to display in the navigation bar
     const links = [
@@ -90,68 +115,69 @@ const ModifyContact = () => {
         { text: '', link: '' },
     ];
 
+
+
+
     // State for the contact form
     const [contact, setContact] = useState({
         lastname: '',
         firstname: '',
         email: '',
         mobile_phone: '',
-        home_phone: '', 
+        home_phone: '',
         avatar_file: ''
     });
 
 
-          // State for the selected image
-          const [selectedImage, setSelectedImage] = useState("");
 
 
-    useEffect(() => {
-        const foundContact = contacts.find(c => c.id.toString() === id);
-        if (foundContact) {
-            setContact(foundContact);
-            setSelectedImage(`../../assets/images/${foundContact.avatar_file}`); // Set selectedImage when contact is found
+
+
+    // Function listen to  the changes in the input fields
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+
+        // If the input IS the file input, then we need to read the file and set the selected image
+        if (name === 'avatar_file') {
+            const file = event.target.files?.[0];
+            if (file) {
+                // Create a new FileReader to read the file content
+                const reader = new FileReader();
+
+                // When the file is read, set the selected image
+                reader.onloadend = () => {
+                    setSelectedImage(reader.result as string);
+                };
+                reader.readAsDataURL(file);
+            }
+        } else {
+            // if the input is NOT the file input, then we just set the value in the state
+            setContact(prevState => ({
+                ...prevState,
+                [name]: value
+            }));
+
+
+            // Validation of the email format with a regex
+            if (name === 'email') {
+                // regex
+                const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                if (!emailRegex.test(value)) {
+                    console.error('Invalid format, the format should be: xxx@xxx.xx');
+                    return;
+                }
+            }
         }
-    }, [id, contacts]);
+    };
 
-
-
-
-   // Function to handle the change in the input fields
-   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    if (name === 'avatar_file') {
-        const file = e.target.files?.[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setSelectedImage(reader.result as string);
-            };
-            reader.readAsDataURL(file);
-        }
-    } else {
-      setContact(prevState => ({
-        ...prevState,
-        [name]: value
-      }));
-
-      if (name === 'email') {
-        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        if (!emailRegex.test(value)) {
-          console.error('Invalid format');
-          return;
-        }
-      }
-    }
-  };
-
-  // Function to fetch the form submission
+    // Function to fetch the form submission
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
+        // Catch input values and add the contact object to the form data
         const formData = new FormData(event.currentTarget);
         if (id) {
-            formData.append('id', id); // Ajoute l'ID au formulaire
+            formData.append('id', id);
         }
         formData.append('contact', JSON.stringify(contact));
 
@@ -159,110 +185,74 @@ const ModifyContact = () => {
         try {
             // Fetching data from the API route
             const response = await fetch('http://localhost:4000/modifycontact', {
-            
-             // sending a POST json document
-            method: 'POST',
-            body: formData,
-        });
 
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-          } else {
-            const jsonResponse = await response.json();
+                // sending a POST json document
+                method: 'POST',
+                body: formData,
+            });
 
-            console.log('Success:', jsonResponse);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            } else {
+                const jsonResponse = await response.json();
 
-            // Change the state of the redirection
-            setRedirected(true);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
+                console.log('Success:', jsonResponse);
 
-// Redirect to the home page when the state is changed
-useEffect(() => {
-    if (redirected) {
-        window.location.assign('/home');
-    }
-}, [redirected]);
+                // Change the state of the redirection
+                setRedirected(true);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+
 
     return (
         <>
             <Navigation links={links} />
-
-            <DeleteContact />
-
+                <DeleteContact />
             <FormContainer theme={colors}>
                 <Form theme={colors} onSubmit={handleSubmit}>
-
-
-                <ImgContainer theme={colors}>
-    <label>
-        <input type="file" id="file" name="avatar_file" accept="image/*" style={{ display: 'none' }} onChange={handleChange} />
-    </label>
-    <label htmlFor="file" style={{ cursor: 'pointer' }}>
-        <img src={selectedImage} alt="" />
-    </label>
-    <p>
-        Change photo
-    </p>
-</ImgContainer>
+                    <ImgContainer theme={colors}>
+                        <label>
+                            <input type="file" id="file" name="avatar_file" accept="image/*" style={{ display: 'none' }} onChange={handleChange} />
+                        </label>
+                        <label htmlFor="file" style={{ cursor: 'pointer' }}>
+                            <img src={selectedImage} alt="" />
+                        </label>
+                        <p>
+                            Changer la photo
+                        </p>
+                    </ImgContainer>
 
 
                     <label>
                         Nom:
-                        <input
-                            type="text"
-                            name="lastname"
-                            value={contact.lastname}
-                            onChange={handleChange}
+                        <input type="text" name="lastname" value={contact.lastname} onChange={handleChange}
                         />
                     </label>
                     <label>
                         Prénom:
-                        <input
-                            type="text"
-                            name="firstname"
-                            value={contact.firstname}
-                            onChange={handleChange}
-                            required
+                        <input type="text" name="firstname" value={contact.firstname} onChange={handleChange} required
                         />
                     </label>
                     <label>
-                        E-mail:
-                        <input
-                            type="email"
-                            name="email"
-                            value={contact.email}
-                            onChange={handleChange}
-                            required
+                        Adresse mail:
+                        <input type="email" name="email" value={contact.email} onChange={handleChange} required
                         />
                     </label>
                     <label>
-                        Mobile:
-                        <input
-                            type="tel"
-                            name="mobile_phone"
-                            value={contact.mobile_phone}
-                            onChange={handleChange}
-                            minLength={10} maxLength={10}
-                            pattern="[0-9]+"
-                            required
+                        Téléphone Mobile:
+                        <input type="tel" name="mobile_phone" value={contact.mobile_phone} onChange={handleChange} minLength={10} maxLength={10} pattern="[0-9]+" required
                         />
                     </label>
                     <label>
-                        Home:
-                        <input
-                            type="tel"
-                            name="home_phone"
-                            value={contact.home_phone}
-                            onChange={handleChange}
-                            minLength={10} maxLength={10}
-                            pattern="[0-9]+"
+                        Téléphone Fixe:
+                        <input type="tel" name="home_phone" value={contact.home_phone} onChange={handleChange} minLength={10} maxLength={10} pattern="[0-9]+"
                         />
                     </label>
-                    <button type="submit">Valider</button>
+                    <button type="submit">Valider les modifications</button>
                 </Form>
             </FormContainer>
         </>
