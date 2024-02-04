@@ -35,6 +35,10 @@ I build an API with Express and its middlewares, library and modules : Cors, Val
 
 I use port 3000 for development listening for the front part and port 4000 for the server.
 
+---> npm install to install all dependencies.
+--->  npm start to launch the application.
+--->  npm run server to launch the server.
+
 
 *******************************************************************************************
 
@@ -68,3 +72,9 @@ Styled Components pour le style et pour les capacités de cette bibliothèque à
 J'ai construit une API avec Express et ses middlewares, bibliothèques et modules : Cors, Validator, multer, dotenv, mysql.
 
 J'utilise le port 3000 pour le développement à l'écoute de la partie frontale et le port 4000 pour le serveur.
+
+
+
+---> npm install pour installer toutes les dépendences
+--->  npm start pour lancer l'application
+--->  npm run server pour lancer le serveur
