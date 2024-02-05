@@ -69,13 +69,18 @@ const Zoom = styled.div`
     box-shadow: ${props => props.theme.colors.blanc5} 2px 2px 2px 2px;
     margin-top: 20px;
     padding: 20px;
+    
+    @media screen and (min-width: 768px) {
+      position: fixed;
+      top: 10px;
+      right: 20px;
+      display: flex;
+      flex-direction: row;
 
-      @media screen and (min-width: 768px) {
-          position: fixed;
-          top: 10px;
-          right: 20px;
-          display: flex;
-          flex-direction: row;
+        img {
+          max-width: 200px;
+          max-height: auto;
+        }
       }
 `
 const WindowContainer = styled.div`

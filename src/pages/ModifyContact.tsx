@@ -136,28 +136,35 @@ const ModifyContact = () => {
     // Function listen to  the changes in the input fields
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
-
-        // If the input IS the file input, then we need to read the file and set the selected image
+    
         if (name === 'avatar_file') {
             const file = event.target.files?.[0];
+    
+            // Check if the file input has been modified
             if (file) {
                 // Create a new FileReader to read the file content
                 const reader = new FileReader();
-
+    
                 // When the file is read, set the selected image
                 reader.onloadend = () => {
                     setSelectedImage(reader.result as string);
                 };
                 reader.readAsDataURL(file);
+                
+                // Update the contact state with the new file name
+                setContact(prevState => ({
+                    ...prevState,
+                    avatar_file: file.name,
+                    avatar_file_changed: true, // Nouvelle propriété pour indiquer que l'image a été modifiée
+                }));
             }
         } else {
-            // if the input is NOT the file input, then we just set the value in the state
+            // If the input is NOT the file input, then we just set the value in the state
             setContact(prevState => ({
                 ...prevState,
-                [name]: value
+                [name]: value,
             }));
-
-
+    
             // Validation of the email format with a regex
             if (name === 'email') {
                 // regex
